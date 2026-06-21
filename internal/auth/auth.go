@@ -70,9 +70,10 @@ func startOAuthLogin() (*Info, error) {
 		return nil, fmt.Errorf("failed to parse response: %w", err)
 	}
 
-	fmt.Println("Opening browser to log in...")
-	if err := openBrowser(cliResp.URL); err != nil {
-		fmt.Printf("Could not open browser. Please visit:\n  %s\n", cliResp.URL)
+	fmt.Printf("To log in, open this URL in your browser:\n\n  %s\n\n", cliResp.URL)
+	if canOpenBrowser() {
+		fmt.Println("Attempting to open your browser...")
+		_ = openBrowser(cliResp.URL)
 	}
 
 	return pollForCompletion(cliResp.Code)
@@ -81,7 +82,7 @@ func startOAuthLogin() (*Info, error) {
 func pollForCompletion(code string) (*Info, error) {
 	fmt.Println("Waiting for authentication...")
 	client := &http.Client{Timeout: 5 * time.Second}
-	deadline := time.Now().Add(30 * time.Second)
+	deadline := time.Now().Add(5 * time.Minute)
 
 	var lastPollErr error
 	for time.Now().Before(deadline) {
@@ -215,6 +216,17 @@ func saveAuth(auth Info) error {
 	}
 
 	return os.WriteFile(config.AuthPath(), data, 0600)
+}
+
+func canOpenBrowser() bool {
+	switch runtime.GOOS {
+	case "darwin":
+		return true
+	case "linux":
+		return os.Getenv("DISPLAY") != "" || os.Getenv("WAYLAND_DISPLAY") != ""
+	default:
+		return false
+	}
 }
 
 func openBrowser(url string) error {
