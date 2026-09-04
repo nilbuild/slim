@@ -64,5 +64,17 @@ import Activity from '../icons/activity.astro';
         <Activity />
       </FeatureRow>
     </div>
+
+    <div class="mt-5 rounded-[10px] border border-border bg-surface px-4 py-3.5">
+      <p class="text-[13px] font-medium text-text mb-1">Safe by default</p>
+      <p class="text-text-tertiary text-[13px] leading-[1.6]">
+        Random-name tunnels show visitors a one-time warning before your content
+        loads, so the shared <code class="font-mono text-[12px]">slim.show</code> domain stays trusted. It appears
+        only for browser page loads &mdash; webhooks, <code class="font-mono text-[12px]">curl</code>, and API clients
+        pass straight through, and any client can skip it with the
+        <code class="font-mono text-[12px]">Slim-Skip-Browser-Warning: 1</code> header. Password-protected,
+        custom-domain, and reserved-subdomain tunnels never show it.
+      </p>
+    </div>
   </div>
 </section>

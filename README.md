@@ -111,6 +111,24 @@ slim share --port 3000 --ttl 30m                    # auto-expires after 30 minu
 slim share --port 3000 --domain myapp.example.com   # custom domain
 ```
 
+### Browser warning page
+
+Random-name tunnels (for example `a1b2c3.slim.show`) show visitors a one-time
+warning page before serving your content, letting them know the site is served
+from someone's computer and is not hosted or verified by slim. This protects the
+shared `slim.show` domain from abuse. It appears only for browser page loads.
+
+The warning is skipped automatically for tunnels that opt out of anonymity: those
+with a password, a verified custom domain, or a reserved subdomain.
+
+Programmatic clients (webhooks, `curl`, mobile SDKs, `fetch`/XHR calls, CORS
+preflights) are never shown the page and reach your server directly. To bypass it
+from a browser-like client too, send the header `Slim-Skip-Browser-Warning: 1`:
+
+```bash
+curl -H "Slim-Skip-Browser-Warning: 1" https://a1b2c3.slim.show/
+```
+
 
 ## Logs and Diagnostics
 
